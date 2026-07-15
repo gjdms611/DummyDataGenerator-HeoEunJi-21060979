@@ -1,3 +1,4 @@
+import argparse
 import random
 import sqlite3
 from datetime import datetime
@@ -33,6 +34,14 @@ def init_db():
     conn.close()
 
 
+def reset_table():
+    conn = get_connection()
+    conn.execute("DROP TABLE IF EXISTS orders")
+    conn.commit()
+    conn.close()
+    init_db()
+
+
 def generate_order():
     return (
         f"ORD-{random.randint(1, 999999):06d}",
@@ -56,3 +65,10 @@ def insert_orders(n):
     )
     conn.commit()
     conn.close()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Generate dummy orders")
+    parser.add_argument("--count", type=int, default=10, help="number of orders to generate")
+    parser.add_argument("--reset", action="store_true", help="wipe and recreate the orders table first")
+    return parser.parse_args()
