@@ -72,3 +72,12 @@ def parse_args():
     parser.add_argument("--count", type=int, default=10, help="number of orders to generate")
     parser.add_argument("--reset", action="store_true", help="wipe and recreate the orders table first")
     return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    if args.reset:
+        reset_table()
+    else:
+        init_db()
+    insert_orders(args.count)
