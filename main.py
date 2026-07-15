@@ -1,6 +1,13 @@
+import random
 import sqlite3
+from datetime import datetime
+
+from faker import Faker
 
 DB_PATH = "dummy.db"
+STATUSES = ("pending", "shipped", "completed")
+
+fake = Faker()
 
 
 def get_connection():
@@ -24,3 +31,14 @@ def init_db():
     )
     conn.commit()
     conn.close()
+
+
+def generate_order():
+    return (
+        f"ORD-{random.randint(1, 999999):06d}",
+        fake.name(),
+        fake.word().capitalize(),
+        random.randint(1, 100),
+        random.choice(STATUSES),
+        datetime.now().isoformat(),
+    )
