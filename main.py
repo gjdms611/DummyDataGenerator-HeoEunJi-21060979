@@ -42,3 +42,17 @@ def generate_order():
         random.choice(STATUSES),
         datetime.now().isoformat(),
     )
+
+
+def insert_orders(n):
+    orders = [generate_order() for _ in range(n)]
+    conn = get_connection()
+    conn.executemany(
+        """
+        INSERT INTO orders (order_no, customer_name, product_name, quantity, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        orders,
+    )
+    conn.commit()
+    conn.close()
